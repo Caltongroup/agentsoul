@@ -4,9 +4,11 @@ AgentSoul — Framework-agnostic agent persistence platform
 """
 
 from setuptools import setup, find_packages
+from pathlib import Path
 
-with open("agent_soul_platform/README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+# Read README
+readme_path = Path(__file__).parent / "agent_soul_platform" / "README.md"
+long_description = readme_path.read_text(encoding="utf-8") if readme_path.exists() else ""
 
 setup(
     name="agentsoul",
@@ -43,10 +45,5 @@ setup(
     extras_require={
         "dev": ["pytest>=7.0", "pytest-cov>=4.0"],
         "rest": ["flask>=2.0"],
-    },
-    entry_points={
-        "console_scripts": [
-            "agentsoul=agent_soul_platform.cli:main",
-        ],
     },
 )
