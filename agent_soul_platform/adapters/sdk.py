@@ -42,18 +42,27 @@ class AgentSoul:
         return AgentSoul(agent_id, backend_type="sqlite", db_path=db_path, **kwargs)
 
     @staticmethod
-    def from_pocketbase(pb_url: str, agent_id: str, token: str = None, **kwargs) -> "AgentSoul":
+    def from_pocketbase(url: str = None, agent_id: str = None, token: str = None, 
+                       pb_url: str = None, **kwargs) -> "AgentSoul":
         """Initialize from PocketBase (preferred for production).
         
         Args:
-            pb_url: PocketBase server URL (e.g., "http://127.0.0.1:8090")
+            url: PocketBase server URL (alias for pb_url, e.g., "http://127.0.0.1:8090")
+            pb_url: PocketBase server URL (primary parameter)
             agent_id: Unique agent identifier
             token: PocketBase auth token (optional for dev)
         """
+        # Support both 'url' and 'pb_url' parameter names
+        pocketbase_url = url or pb_url
+        if not pocketbase_url:
+            raise ValueError("Must provide either 'url' or 'pb_url' parameter")
+        if not agent_id:
+            raise ValueError("Must provide 'agent_id' parameter")
+            
         return AgentSoul(
             agent_id,
             backend_type="pocketbase",
-            pb_url=pb_url,
+            pb_url=pocketbase_url,
             token=token or "pb_dev_token",
             **kwargs
         )
