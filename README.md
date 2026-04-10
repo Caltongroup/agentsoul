@@ -68,3 +68,22 @@ AgentSoul is **open-core**:
 
 Interested in a commercial license or white-label version?  
 Contact: darrell@caltongroup.com or open an issue on GitHub.
+
+## PocketBase Setup (One-time)
+
+AgentSoul uses **PocketBase** as its default local-first backend. It runs completely on your hardware with zero cloud costs.
+
+### 1. Start PocketBase (if not already running)
+
+```bash
+# Download and start PocketBase (one-time)
+mkdir -p ~/pocketbase && cd ~/pocketbase
+curl -L https://github.com/pocketbase/pocketbase/releases/latest/download/pocketbase_darwin_arm64.zip -o pocketbase.zip
+unzip -o pocketbase.zip
+chmod +x pocketbase
+
+# Start the server
+./pocketbase serve --http=127.0.0.1:8090
+
+
+
