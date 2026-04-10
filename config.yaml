@@ -1,0 +1,7 @@
+projects:
+  agent-persistence-backbone:
+    path: /Users/darrellcalton/Projects/agent-persistence-backbone
+    runtime: tmux
+    agent: aider
+    model: ollama/qwen2.5-coder:7b
+    tracker: none
