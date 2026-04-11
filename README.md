@@ -1,136 +1,107 @@
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/a8400dcc-cc8b-445e-bfec-37b0a1a9aa85" alt="AgentSoul Logo" width="300"/>
-</p>
-
-# AgentSoul — Framework-Agnostic Agent Persistence Platform
-
-**The memory backbone for production AI agents.**  
-Local-first • Portable • Monetizable
-
-[![GitHub stars](https://img.shields.io/github/stars/Caltongroup/agentsoul.svg)](https://github.com/Caltongroup/agentsoul/stargazers)
+<div align="center">
+  <img src="https://github.com/Caltongroup/agentsoul/blob/main/agentsoul-logo.png?raw=true" alt="AgentSoul Logo" width="280">
+  <h1>AgentSoul</h1>
+  <p><strong>Local-first • Encrypted • Persistent Memory Backbone for AI Agents</strong></p>
+</div>
 
 ---
 
-## What is AgentSoul?
+**AgentSoul** gives your AI agents reliable, encrypted memory that actually persists — without depending on massive context windows or cloud services.
 
-AgentSoul is a **standalone, open-core persistence layer** that solves the hardest problem in agent development: **reliable, portable, long-term agent memory**.
+Built because agents kept forgetting.
 
-Most agents forget after each session. Production agents need memory that:
-- Survives reboots and hardware moves (Mac → RPi5 → fleet)
-- Works with any framework (Hermes, LangGraph, CrewAI, AutoGen, etc.)
-- Never drifts (importance-based consolidation)
-- Stays private and zero-cost to run (local-first, no cloud bills)
-- Is audit-ready and GDPR-compliant
+### Quick Start
 
-**Integration takes <10 lines of code.**
+```bash
+# 1. Install the free core
+pip install agentsoul
 
----
+# 2. Initialize PocketBase (one-time)
+python -m agentsoul.setup
 
-## Core Features
-
-- **Universal SDK** — Three backends: PocketBase, REST, SQLite
-- **True Soul Portability** — Encrypted export/import of complete agent identity + history
-- **Importance-Based Decay** — Memories weighted by business signals (recency, frequency, revenue, feedback), not just time
-- **Long-Context Consolidation** — Semantic compression prevents drift and hallucination
-- **Production Packaging** — One-liner RPi5 deploy + Docker + systemd
-- **Framework Agnostic** — Works with any LLM/agent framework
-
----
-
-## Quick Start
-
-```python
+# 3. Use in your agent
 from agentsoul import AgentSoul
 
-# Initialize with your preferred backend
-soul = AgentSoul.from_pocketbase(
-    url="http://127.0.0.1:8090",
-    agent_id="clerk_001"
-)
-
-# Remember something
-soul.remember("customer", "cust_001", {
-    "name": "Alice",
-    "payment_style": "reliable",
-    "last_interaction": "2026-04-09"
-})
-
-# Recall with automatic consolidation
-context = soul.recall("customer", "cust_001", consolidate=True)
-
-# Get ready-to-use system prompt
-system_prompt = soul.get_system_context("cust_001")
-```
-
----
-
-## Recommended Usage Pattern (Orchestrator Mindset)
-
-AgentSoul is **not** just another memory tool — it is the persistence backbone that prevents context hoarding.
-
-The most effective pattern (what we learned the hard way):
-
-```python
-from agentsoul import AgentSoul
-
-# 1. Load persistent soul at the very start of every session
 soul = AgentSoul.from_pocketbase(
     url="http://127.0.0.1:8090",
     agent_id="your_agent_001"
 )
 
-# 2. Always load previous state first
-previous_state = soul.recall("agent_state", "current")
-
-# 3. Work normally...
-# (your agent logic here, armed with prior context)
-
-# 4. Persist at natural breakpoints (never let context grow too large)
-soul.remember("task", "current_plan", current_plan_dict)
-soul.log_interaction("agent_turn", "completed", {
-    "tokens_used": 1247,
-    "context_trim_point": 0.6
+memory_id = soul.remember("customer", "sarah_chen_001", {
+    "name": "Sarah Chen",
+    "issue": "Furnace not heating...",
+    "priority": "high"
 })
 
-# 5. Export soul artifact for portability / backup
-soul.export_soul(passphrase="your_secure_phrase")  # encrypted portable file
+memory = soul.recall("customer", "sarah_chen_001")
 ```
-
-**Key Rule:**  
-**Never hoard project state in LLM context.**  
-If you're about to exceed ~60% of your context window → persist and trim.
-
-This turns AgentSoul from "nice to have" into invisible infrastructure. The next version (AgentSoul Orchestrator) will enforce this pattern automatically.
 
 ---
 
-## Commercial Licensing & Support
+### Open-Core Model
 
-AgentSoul is **open-core**:
+**AgentSoul Core** (MIT License — Free Forever)  
+- Full persistence engine (`remember`, `recall`, audit trail)  
+- AES-256-GCM encryption  
+- SQLite, REST, and PocketBase backends  
+- Setup module and clean SDK  
 
-- **MIT License** — Free for open source, personal, and internal use  
-- **Startup Tier** — $299/year — Up to 10 agents, email support  
-- **Professional Tier** — $999/year — Up to 100 agents, priority support, private Slack channel  
-- **Enterprise Tier** — Custom pricing — Unlimited agents, dedicated SLA, on-prem support, custom features
+**AgentSoul Orchestrator** (Professional Tier — $999/yr)  
+- **Coming in v0.2**  
+- The enforcement layer that makes persistence the *default behavior*  
+- Automatically loads state at session start  
+- Forces persist + context trimming before hitting limits  
+- Delivers measurable feedback ("Saved 2,400 tokens this turn")  
 
-Interested in a commercial license or white-label version?  
-Contact: darrell@caltongroup.com or open an issue on GitHub.
+This split keeps the foundation open for easy adoption while protecting the key piece that forces agents to actually use persistent memory instead of hoarding context.
 
-## PocketBase Setup (One-time)
+---
 
-AgentSoul uses **PocketBase** as its default local-first backend. It runs completely on your hardware with zero cloud costs.
+### Recommended Usage Pattern
 
-### 1. Start PocketBase (if not already running)
+```python
+from agentsoul import AgentSoul
 
-```bash
-# Download and start PocketBase (one-time)
-mkdir -p ~/pocketbase && cd ~/pocketbase
-curl -L https://github.com/pocketbase/pocketbase/releases/latest/download/pocketbase_darwin_arm64.zip -o pocketbase.zip
-unzip -o pocketbase.zip
-chmod +x pocketbase
+# Load persistent soul at the start of every session
+soul = AgentSoul.from_pocketbase(url="http://127.0.0.1:8090", agent_id="your_agent_001")
 
-# Start the server
-./pocketbase serve --http=127.0.0.1:8090
+# Work normally...
+# ... your agent logic here ...
 
+# Persist at natural breakpoints
+soul.remember("task", "current_plan", current_plan_dict)
+soul.log_interaction("agent_turn", "completed", {"tokens_used": 1247})
 
+# Export encrypted soul for backup/portability
+soul.export_soul()
+```
 
+**Key rule:** Never hoard project state in LLM context.  
+When approaching context limits → persist and trim.
+
+---
+
+### Features (Core)
+
+- ✅ AES-256-GCM encryption with round-trip verification
+- ✅ Category + key-based memory lookup
+- ✅ Full audit trail
+- ✅ System context management
+- ✅ Encrypted soul export/import
+- ✅ Three backends (SQLite recommended for local-first)
+
+### Monetization
+
+- **MIT** — Free open core
+- **Startup** — $299/yr (10 agents)
+- **Professional** — $999/yr (100 agents) — includes Orchestrator (v0.2)
+- **Enterprise** — Custom
+
+---
+
+**Built by Darrell Calton** — blending media leadership at Iliad Media Group with hands-on AI tooling.
+
+Star the repo if you're tired of agents losing their memory.  
+Feedback and early adopters welcome.
+
+[GitHub Issues](https://github.com/Caltongroup/agentsoul/issues) • [License](LICENSE)
