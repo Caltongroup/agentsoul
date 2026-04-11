@@ -60,6 +60,49 @@ context = soul.recall("customer", "cust_001", consolidate=True)
 
 # Get ready-to-use system prompt
 system_prompt = soul.get_system_context("cust_001")
+```
+
+---
+
+## Recommended Usage Pattern (Orchestrator Mindset)
+
+AgentSoul is **not** just another memory tool — it is the persistence backbone that prevents context hoarding.
+
+The most effective pattern (what we learned the hard way):
+
+```python
+from agentsoul import AgentSoul
+
+# 1. Load persistent soul at the very start of every session
+soul = AgentSoul.from_pocketbase(
+    url="http://127.0.0.1:8090",
+    agent_id="your_agent_001"
+)
+
+# 2. Always load previous state first
+previous_state = soul.recall("agent_state", "current")
+
+# 3. Work normally...
+# (your agent logic here, armed with prior context)
+
+# 4. Persist at natural breakpoints (never let context grow too large)
+soul.remember("task", "current_plan", current_plan_dict)
+soul.log_interaction("agent_turn", "completed", {
+    "tokens_used": 1247,
+    "context_trim_point": 0.6
+})
+
+# 5. Export soul artifact for portability / backup
+soul.export_soul(passphrase="your_secure_phrase")  # encrypted portable file
+```
+
+**Key Rule:**  
+**Never hoard project state in LLM context.**  
+If you're about to exceed ~60% of your context window → persist and trim.
+
+This turns AgentSoul from "nice to have" into invisible infrastructure. The next version (AgentSoul Orchestrator) will enforce this pattern automatically.
+
+---
 
 ## Commercial Licensing & Support
 
