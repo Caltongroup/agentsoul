@@ -6,7 +6,7 @@
 
 ---
 
-**AgentSoul** gives your AI agents reliable, encrypted memory that actually persists — without depending on massive context windows or cloud services.
+AgentSoul gives your AI agents reliable, encrypted memory that actually persists — without depending on massive context windows or cloud services.
 
 Built because agents kept forgetting.
 
@@ -38,22 +38,53 @@ memory = soul.recall("customer", "sarah_chen_001")
 
 ---
 
+### What Makes AgentSoul Different
+
+Most agent memory tools focus on giving agents **knowledge about the user** (emails, calendar, life events).
+
+**AgentSoul focuses on giving agents reliable memory of themselves** — task state, decision history, customer context — with strong encryption and true portability.
+
+---
+
+### Why AgentSoul Is Worth Paying For
+
+The free MIT core gives you the engine.
+
+The **Professional Orchestrator (v0.2)** is the enforcement layer that solves the real problem: **even when agents know they should persist, they usually don't.**
+
+With the Orchestrator:
+- ✅ Persistence becomes automatic at natural checkpoints
+- ✅ Context is trimmed before it explodes
+- ✅ You see measurable wins ("Saved 2,400 tokens this turn")
+- ✅ Agents stop forgetting between sessions
+
+This is the difference between "nice-to-have memory" and production-grade reliability.
+
+---
+
 ### Open-Core Model
 
 **AgentSoul Core** (MIT License — Free Forever)  
 - Full persistence engine (`remember`, `recall`, audit trail)  
-- AES-256-GCM encryption  
+- AES-256-GCM encryption with exportable souls  
 - SQLite, REST, and PocketBase backends  
 - Setup module and clean SDK  
 
-**AgentSoul Orchestrator** (Professional Tier — $999/yr)  
+**AgentSoul Orchestrator** (Professional Tier)  
 - **Coming in v0.2**  
-- The enforcement layer that makes persistence the *default behavior*  
-- Automatically loads state at session start  
-- Forces persist + context trimming before hitting limits  
-- Delivers measurable feedback ("Saved 2,400 tokens this turn")  
+- Automatic state enforcement at task boundaries  
+- Smart context trimming before hitting limits  
+- Measurable feedback ("Saved 2,400 tokens this turn")  
+- Turns optional memory into production-grade infrastructure  
 
-This split keeps the foundation open for easy adoption while protecting the key piece that forces agents to actually use persistent memory instead of hoarding context.
+---
+
+### Pricing
+
+- **Free** — MIT core (unlimited agents)
+- **Starter** — $149/yr (up to 10 agents) + basic Orchestrator
+- **Professional** — $599/yr (up to 100 agents) — full Orchestrator
+- **Enterprise** — Custom (on-prem, SSO, SLA, multi-tenant)
 
 ---
 
@@ -63,7 +94,10 @@ This split keeps the foundation open for easy adoption while protecting the key 
 from agentsoul import AgentSoul
 
 # Load persistent soul at the start of every session
-soul = AgentSoul.from_pocketbase(url="http://127.0.0.1:8090", agent_id="your_agent_001")
+soul = AgentSoul.from_pocketbase(
+    url="http://127.0.0.1:8090",
+    agent_id="your_agent_001"
+)
 
 # Work normally...
 # ... your agent logic here ...
@@ -72,12 +106,11 @@ soul = AgentSoul.from_pocketbase(url="http://127.0.0.1:8090", agent_id="your_age
 soul.remember("task", "current_plan", current_plan_dict)
 soul.log_interaction("agent_turn", "completed", {"tokens_used": 1247})
 
-# Export encrypted soul for backup/portability
-soul.export_soul()
+soul.export_soul()   # encrypted portable backup
 ```
 
 **Key rule:** Never hoard project state in LLM context.  
-When approaching context limits → persist and trim.
+When approaching limits → persist and trim.
 
 ---
 
@@ -88,18 +121,11 @@ When approaching context limits → persist and trim.
 - ✅ Full audit trail
 - ✅ System context management
 - ✅ Encrypted soul export/import
-- ✅ Three backends (SQLite recommended for local-first)
-
-### Monetization
-
-- **MIT** — Free open core
-- **Startup** — $299/yr (10 agents)
-- **Professional** — $999/yr (100 agents) — includes Orchestrator (v0.2)
-- **Enterprise** — Custom
+- ✅ SQLite, REST, and PocketBase backends
 
 ---
 
-**Built by Darrell Calton** — blending media leadership at Iliad Media Group with hands-on AI tooling.
+**Built by Darrell Calton** — from radio/media leadership at Iliad Media Group into practical AI tooling and consulting.
 
 Star the repo if you're tired of agents losing their memory.  
 Feedback and early adopters welcome.
