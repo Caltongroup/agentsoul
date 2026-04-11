@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a930415d-29b9-4878-a544-87ddd45eb415" alt="AgentSoul Logo" width="300"/>
+</p>
+
 # AgentSoul — Framework-Agnostic Agent Persistence Platform
 
 **The memory backbone for production AI agents.**  
