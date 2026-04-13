@@ -7,7 +7,7 @@
 set -e
 
 AGENT_SOUL_HOME="/opt/agentsoul"
-GITHUB_REPO="https://github.com/agentsoul/agentsoul"
+GITHUB_REPO="https://github.com/Caltongroup/agentsoul"
 OLLAMA_MODEL="qwen2.5-coder:4b"
 API_PORT=5001
 
