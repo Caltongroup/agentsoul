@@ -159,6 +159,41 @@ prompt = soul.get_system_context("user_123")
 
 ---
 
+## Persistence Operations
+
+Use these utilities to keep memory growth predictable and observable.
+
+### Retention + Compaction (safe first)
+
+```bash
+# Preview impact only
+python3 agent_soul_platform/persistence/maintenance.py \
+    --db-path /home/darrell/LLM/pocketbase/pb_data/data.db \
+    --dry-run --skip-vacuum
+
+# Apply retention policy + VACUUM + ANALYZE
+python3 agent_soul_platform/persistence/maintenance.py \
+    --db-path /home/darrell/LLM/pocketbase/pb_data/data.db
+```
+
+Defaults:
+- interactions retention: 180 days
+- audit retention: 365 days
+- keep latest exports: 50
+
+### Memory Growth Monitoring
+
+```bash
+# Capture current metrics and write baseline snapshot
+python3 agent_soul_platform/persistence/monitoring.py \
+    --db-path /home/darrell/LLM/pocketbase/pb_data/data.db \
+    --write-snapshot
+```
+
+The monitor reports DB size, free pages, table row counts, and deltas from the previous snapshot.
+
+---
+
 ## Licensing & Pricing
 
 ### Open Source (MIT)

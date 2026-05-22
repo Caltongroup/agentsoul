@@ -10,6 +10,29 @@
 
 Built because agents kept forgetting.
 
+### Memory Backends
+
+AgentSoul supports multiple memory backends:
+
+| Backend      | Use Case                        | Strengths                          |
+|--------------|----------------------------------|------------------------------------|
+| **LanceDB**  | Semantic / vector search        | "What do I know about X?"          |
+| **PocketBase** | Structured + relational        | Filters, audit, session history    |
+| **Hybrid**   | Production agents (recommended) | Best of both worlds                |
+
+```python
+from agentsoul import AgentSoul
+
+# Hybrid mode (default)
+soul = AgentSoul(backend="hybrid")
+
+# Pure semantic recall
+memories = soul.recall("retirement plans and AgentSoul vision")
+
+# Formatted context for prompts
+context = soul.recall_formatted("HR policy and benefits questions")
+```
+
 ### Quick Start
 
 ```bash
@@ -120,6 +143,6 @@ Feedback and early adopters welcome.
 **Next step:**  
 Commit with:
 ```
-git commit -m "README: Final polish with clear differentiation and open-core positioning"
+git commit -m "feat: Add LanceDB semantic memory + unified AgentSoul core"
 git push
 ```
