@@ -62,6 +62,14 @@ This is the difference between "nice-to-have memory" and production-grade reliab
 
 ---
 
+### Advanced Patterns
+
+See the `patterns/` directory for production-grade processes that improve reliability when using AgentSoul with Hermes and other long-running agent environments.
+
+- [Memory Bootstrap Process](patterns/memory-bootstrap.md) — Automatic, deterministic memory reload on context reset with idle handling and user controls.
+
+---
+
 ### Open-Core Model
 
 **AgentSoul Core** (MIT License — Free Forever)  
